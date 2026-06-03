@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How To Write Clean Code Comments For Documentation (The Right Way)</title>
+<meta name="description" content="Learn practical tips for writing clean code comments that explain intent, stay concise, and complement self-documenting code without adding confusion.">
+<link rel="canonical" href="https://belikenative.com/write-clean-code-comments-documentation/">
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:720px;margin:40px auto;padding:0 20px;line-height:1.7;color:#333;background:#fff}
+h1{font-size:1.8em;line-height:1.3;margin-bottom:8px}
+h2{font-size:1.4em;margin-top:32px}
+h3{font-size:1.2em;margin-top:24px}
+p{margin:16px 0}
+a{color:#2563eb;text-decoration:none}
+a:hover{text-decoration:underline}
+ul{padding-left:24px}
+li{margin:8px 0}
+.source{color:#666;font-size:14px;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid #eee}
+.footer{margin-top:40px;padding-top:20px;border-top:1px solid #eee;color:#666;font-size:14px}
+</style>
+</head>
+<body>
+<article>
+<h1>How To Write Clean Code Comments For Documentation (The Right Way)</h1>
+<div class="source">Originally published at <a href="https://belikenative.com/write-clean-code-comments-documentation/">belikenative.com/write-clean-code-comments-documentation</a></div>
+<p>I'll be honest: I've spent way too many hours staring at comments like "// increment i" or "// TODO: fix this later." We've all been there. Comments can either save your future self hours of head-scratching or turn your codebase into a cluttered mess. The trick is knowing when to write them, what to say, and how to keep them from becoming outdated.</p>
+<p>Let me walk you through what actually works when documenting your code.</p>
+<h2>Why Most Comments Fail</h2>
+<p>The biggest mistake I see? Comments that explain *what* the code does instead of *why* it exists. If someone needs to understand what a loop does, they can read the code itself. That's the beauty of programming languages—they're already pretty readable if you write clean code.</p>
+<p>But the *why*? That's gold. That's the context you'll forget three months from now when you're debugging at 2 AM.</p>
+<p>Here's a real example from my own work:</p>
+<p>```python</p>
+<p># Bad: explains the obvious</p>
+<p># Loop through all users and send emails for user in users: send_email(user)</p>
+<p># Good: explains the intent</p>
+<p># Send onboarding emails even if users haven't completed setup</p>
+<p># Some users skip the wizard, and we need them engaged for user in users: send_email(user) ```</p>
+<p>See the difference? The bad comment is noise. The good one tells me *why* we're sending emails unconditionally, which might contradict what I'd expect.</p>
+<h2>Make Comments Self-Documenting (So You Need Fewer of Them)</h2>
+<p>Here's a counterintuitive tip: the best comment is often no comment at all. If your code needs a paragraph to explain what it does, maybe the code needs rewriting instead.</p>
+<p>I'm not saying comments are bad. I'm saying clean, expressive code reduces your comment burden. Think of it this way: every comment is a liability. It needs to stay updated, stay relevant, and not mislead anyone.</p>
+<p>When I write code, I ask myself: "Can I make this clearer by renaming a variable or extracting a method?" If yes, I do that first. Then I add comments only for the stuff that can't be expressed in code.</p>
+<p>For example:</p>
+<p>```javascript // Before: needs a comment // Calculate discount for returning customers who spent over $100 let d = 0; if (c.orders > 0 && c.total > 100) { d = 0.15; }</p>
+<p>// After: self-documenting const RETURNING_CUSTOMER_DISCOUNT = 0.15; const MINIMUM_SPEND_FOR_DISCOUNT = 100;</p>
+<p>let discount = 0; if (customer.hasPreviousOrders() && customer.totalSpend > MINIMUM_SPEND_FOR_DISCOUNT) { discount = RETURNING_CUSTOMER_DISCOUNT; } ```</p>
+<p>The second version doesn't need a comment. The names tell the story. If you want to improve your writing skills—not just for code but for documentation in general—check out <a href="https://belikenative.com/">BeLikeNative</a>. They focus on making your communication clearer, which is exactly what good commenting is about.</p>
+<h2>Stick to One Style (And Be Consistent)</h2>
+<p>Nothing drives me crazier than a file that mixes `//`, `/* */`, `#`, and `--` depending on the mood of whoever wrote it. Pick a style and stick with it across your project.</p>
+<p>For most languages, the standard is:</p>
+<ul><li>**Single-line comments** (`//` in JavaScript, `#` in Python) for brief explanations</li><li>**Block comments** (`/* */` in C-style languages) for longer notes or disabling code</li><li>**Doc comments** (`/** */` in Java/TypeScript, `"""` in Python) for formal API documentation</li></ul>
+<p>But honestly, consistency matters more than which style you pick. If your team uses `//` for everything, do that. Just don't switch mid-file.</p>
+<p>I also recommend adding a comment header to each file or module explaining its purpose. Something like:</p>
+<p>```python</p>
+<p># Module: payment_processor.py</p>
+<p># Handles all payment-related operations including validation,</p>
+<p># third-party API calls, and refund processing.</p>
+<p># See https://docs.example.com/payments for full documentation. ```</p>
+<p>Short, sweet, and tells you exactly where to look for more info.</p>
+<h2>Keep Comments Current (Or Delete Them)</h2>
+<p>Outdated comments are worse than no comments. They actively mislead you. I've debugged issues for hours only to realize the comment explaining the "fix" was from a version three releases ago and no longer applies.</p>
+<p>Here's my rule: when you change code, update the comments. If you can't update them, delete them. A missing comment is safer than a wrong one.</p>
+<p>This is where version control helps. If you're wondering why something is done a certain way, `git blame` can tell you who wrote it and when. But that's a pain for every line. Good comments save you that step.</p>
+<p>For a deeper dive into this exact topic—how to structure comments for documentation that people actually read—check out my guide on <a href="https://belikenative.com/write-clean-code-comments-documentation/">How To Write Clean Code Comments For Documentation</a>. It covers patterns I've used across multiple projects.</p>
+<h2>Use Comments to Explain Constraints and Trade-offs</h2>
+<p>Some things can't be expressed in code. Business rules, performance constraints, workarounds for third-party bugs—these are perfect candidates for comments.</p>
+<p>For example:</p>
+<p>```java // We use a simple loop instead of Stream API here because // the list is always < 100 items, and Stream adds ~50ms overhead. // This buys us faster response times in batch processing. ```</p>
+<p>Or:</p>
+<p>```sql -- Using LEFT JOIN instead of INNER JOIN because some customers -- don't have orders yet, but we still need them in the export. ```</p>
+<p>These comments explain *decisions*, not mechanics. That's the sweet spot.</p>
+<p>I also like to mark workarounds with a clear label:</p>
+<p>```python</p>
+<p># WORKAROUND: Third-party API returns 400 for valid requests</p>
+<p># if the timestamp is within 1 second of their clock.</p>
+<p># Add a 2-second delay to avoid this race condition. time.sleep(2) ```</p>
+<p>When the third-party fixes their bug, this comment tells you exactly what to remove and why.</p>
+<h2>Avoid These Common Comment Pitfalls</h2>
+<p>Let me save you some pain. Here are the worst offenders:</p>
+<ul><li>**The obvious:** "// This adds two numbers" — please don't.</li><li>**The rant:** "// Don't touch this, it took me 3 days to figure out" — unprofessional and unhelpful.</li><li>**The TODO graveyard:** "// TODO: refactor this mess" — if you're not going to do it, don't write it.</li><li>**The novel:** A 50-line comment explaining a 5-line function — extract the explanation into a separate doc.</li><li>**The lie:** A comment that contradicts the code — happens when someone changes code but not the comment.</li></ul>
+<p>If you find yourself writing any of these, stop. Take a breath. Either rewrite the code or delete the comment.</p>
+<h2>FAQ</h2>
+<p>**Q: Should I comment every function?** Only if the function's purpose isn't obvious from its name and parameters. Well-named functions like `calculateTotalWithTax()` usually don't need comments. Complex business logic might.</p>
+<p>**Q: How do I handle comments that are out of date?** Delete them or update them immediately. Stale comments cause confusion. If you're not sure what the current code does, write a new comment that matches the behavior.</p>
+<p>**Q: Can I use AI tools to write comments for me?** You can, but be careful. AI-generated comments often explain the obvious or miss the "why." Use them as a starting point, then edit for clarity and intent. If you want to polish your writing further, the <a href="https://belikenative.com/tools/text-simplifier/">BeLikeNative text simplifier</a> can help you make sure your comments are easy to understand.</p>
+<h2>Final Thoughts</h2>
+<p>Clean comments are about communication, not decoration. They answer the "why" that your code can't. They stay concise, stay current, and respect the reader's time.</p>
+<p>Next time you write a comment, ask yourself: "Will this help someone in six months?" If the answer is no, leave it out. If it's yes, make sure it's clear, consistent, and correct.</p>
+<p>Your future self will thank you.</p>
+<div class="footer">
+<p>Read the original at <a href="https://belikenative.com/write-clean-code-comments-documentation/">belikenative.com/write-clean-code-comments-documentation</a></p>
+<p><a href="https://belikenative.com">BeLikeNative</a> is a free Chrome extension for real-time grammar checking and writing improvement.</p>
+</div>
+</article>
+</body>
+</html>
